@@ -7,7 +7,7 @@ const KEY_PAD_BYTE: u8 = 0x00;
 const SHA1_DIGEST_BYTES: usize = 20;
 const SHA1_KEY_BYTES: usize = 64;
 
-fn hmac_sha1(key: &[u8], message: &[u8]) -> [u8; SHA1_DIGEST_BYTES] {
+pub fn hmac_sha1(key: &[u8], message: &[u8]) -> [u8; SHA1_DIGEST_BYTES] {
     let mut sha1_ctx = sha1::Sha1::new();
     let mut auth_key: &mut [u8; SHA1_KEY_BYTES] = &mut [KEY_PAD_BYTE; SHA1_KEY_BYTES];
 
