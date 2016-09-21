@@ -73,9 +73,9 @@ mod tests {
     #[test]
     fn test_vector2() {
         // tuples of (data, key, expected hex string)
-        let data = "Hi There".as_bytes();
-        let key = &[0x0b; 20];
-        let expected = "b617318655057264e28bc0b6fb378c8ef146be00".to_string();
+        let data = "what do ya want for nothing?".as_bytes();
+        let key = "Jefe".as_bytes();
+        let expected = "effcdf6ae5eb2fa2d27416d5f184df9c259a7c79".to_string();
 
         let hash = hmac_sha1(key, data);
         assert_eq!(hash.to_hex(),expected);
@@ -84,9 +84,9 @@ mod tests {
     #[test]
     fn test_vector3() {
         // tuples of (data, key, expected hex string)
-        let data = "Hi There".as_bytes();
-        let key = &[0x0b; 20];
-        let expected = "b617318655057264e28bc0b6fb378c8ef146be00".to_string();
+        let data = &[0xdd; 50];
+        let key = &[0xaa; 20];
+        let expected = "125d7342b9ac11cd91a39af48aa17b4f63f175d3".to_string();
 
         let hash = hmac_sha1(key, data);
         assert_eq!(hash.to_hex(),expected);
@@ -95,9 +95,9 @@ mod tests {
     #[test]
     fn test_vector4() {
         // tuples of (data, key, expected hex string)
-        let data = "Hi There".as_bytes();
-        let key = &[0x0b; 20];
-        let expected = "b617318655057264e28bc0b6fb378c8ef146be00".to_string();
+        let data = &[0xcd; 50];
+        let key = &[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25];
+        let expected = "4c9007f4026250c6bc8414f9bf50c86c2d7235da".to_string();
 
         let hash = hmac_sha1(key, data);
         assert_eq!(hash.to_hex(),expected);
