@@ -1,8 +1,12 @@
 [package]
 name = "hmac-sha1"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Philip Woolford <woolford.philip@gmail.com>"]
+keywords = ["hmac", "sha1"]
+description = "Minimal implementation of HMAC-SHA1 in Rust."
+license = "BSD-3-Clause"
 license-file = "LICENSE"
+repository = "https://github.com/pantsman0/rust-hmac-sha1"
 
 include = [
     "**/*.rs",
