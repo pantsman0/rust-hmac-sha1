@@ -1,0 +1,15 @@
+[package]
+name = "hmac-sha1"
+version = "0.1.0"
+authors = ["Philip Woolford <woolford.philip@gmail.com>"]
+license-file = "LICENSE"
+
+[lib]
+name = "libhmacsha1"
+path = "src/lib.rs"
+
+[dependencies]
+sha1 = "0.2.0"
+
+[dev-dependencies]
+rustc-serialize = "0.3"
