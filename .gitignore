@@ -1,1 +1,9 @@
-target
+#intelliJ IDEA
+.idea/
+hmac-sha1.iml
+
+#Rust
+Cargo.lock
+
+#Build resources
+target/
