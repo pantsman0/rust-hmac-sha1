@@ -1,15 +1,18 @@
 extern crate sha1;
 
-const INNER_PAD_BYTE: u8 = 0x36;
-const OUTER_PAD_BYTE: u8 = 0x5c;
-const KEY_PAD_BYTE: u8 = 0x00;
-
+// define public constants
 const SHA1_DIGEST_BYTES: usize = 20;
 const SHA1_KEY_BYTES: usize = 64;
 
 pub fn hmac_sha1(key: &[u8], message: &[u8]) -> [u8; SHA1_DIGEST_BYTES] {
+    // set constants for HMAC
+    let inner_pad_byte: u8 = 0x36;
+    let outer_pad_byte: u8 = 0x5c;
+    let key_pad_byte:   u8 = 0x00;
+
+    // instantiate internal structures
     let mut sha1_ctx = sha1::Sha1::new();
-    let mut auth_key: &mut [u8; SHA1_KEY_BYTES] = &mut [KEY_PAD_BYTE; SHA1_KEY_BYTES];
+    let mut auth_key: &mut [u8; SHA1_KEY_BYTES] = &mut [key_pad_byte; SHA1_KEY_BYTES];
 
     // if the key is longer than the hasher's block length, it should be truncated using the hasher
     if { key.len() > SHA1_KEY_BYTES } {
@@ -26,8 +29,8 @@ pub fn hmac_sha1(key: &[u8], message: &[u8]) -> [u8; SHA1_DIGEST_BYTES] {
     }
 
     // generate padding arrays
-    let mut inner_padding: [u8; SHA1_KEY_BYTES] = [INNER_PAD_BYTE; SHA1_KEY_BYTES];
-    let mut outer_padding: [u8; SHA1_KEY_BYTES] = [OUTER_PAD_BYTE; SHA1_KEY_BYTES];
+    let mut inner_padding: [u8; SHA1_KEY_BYTES] = [inner_pad_byte; SHA1_KEY_BYTES];
+    let mut outer_padding: [u8; SHA1_KEY_BYTES] = [outer_pad_byte; SHA1_KEY_BYTES];
 
     for offset in 0..auth_key.len() {
         inner_padding[offset] ^= auth_key[offset];

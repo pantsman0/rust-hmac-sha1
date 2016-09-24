@@ -1,6 +1,6 @@
 [package]
 name = "hmac-sha1"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Philip Woolford <woolford.philip@gmail.com>"]
 keywords = ["hmac", "sha1"]
 description = "Minimal implementation of HMAC-SHA1 in Rust."
