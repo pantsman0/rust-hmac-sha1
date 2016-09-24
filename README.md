@@ -1,6 +1,6 @@
 # Rust-HMAC-SHA1
 
-[![Build Status](https://github.com/pantsman0/rust-hmac-sha1.png?branch=master)](https://github.com/pantsman0/rust-hmac-sha1)
+[![Build Status](https://travis-ci.org/pantsman0/rust-hmac-sha1.png?branch=master)](https://github.com/pantsman0/rust-hmac-sha1)
 
 A pure rust implementation of the Hash-based Message Authentication Code Algoritm for SHA1.
 
