@@ -1,7 +1,7 @@
 extern crate sha1;
 
-// define public constants
-const SHA1_DIGEST_BYTES: usize = 20;
+// define hash constants
+pub const SHA1_DIGEST_BYTES: usize = 20;
 const SHA1_KEY_BYTES: usize = 64;
 
 pub fn hmac_sha1(key: &[u8], message: &[u8]) -> [u8; SHA1_DIGEST_BYTES] {
