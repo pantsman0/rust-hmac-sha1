@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/pantsman0/rust-hmac-sha1.png?branch=master)](https://github.com/pantsman0/rust-hmac-sha1)
 ![creates.io version](https://img.shields.io/crates/v/hmac-sha1.svg)
 
-A pure rust implementation of the Hash-based Message Authentication Code Algoritm for SHA1.
+A pure Rust implementation of the Hash-based Message Authentication Code Algoritm for SHA1.
 
 ## Usage
 
@@ -15,7 +15,7 @@ hmac-sha1 = "^0.1"
 
 To use rust-hmac-sha1 add the following to your crate root:
 ```rust
-extern crate hmac-sha1
+use hmac-sha1;
 ```
 ## Contributions
 

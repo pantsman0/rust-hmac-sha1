@@ -1,24 +1,21 @@
 [package]
 name = "hmac-sha1"
 version = "0.1.3"
+edition = "2018"
 authors = ["Philip Woolford <woolford.philip@gmail.com>"]
 keywords = ["hmac", "sha1"]
 description = "Minimal implementation of HMAC-SHA1 in Rust."
 license-file = "LICENSE"
 repository = "https://github.com/pantsman0/rust-hmac-sha1"
 
-include = [
-    "**/*.rs",
-    "LICENSE",
-    "Cargo.toml",
-    ]
+include = ["**/*.rs", "LICENSE"]
 
 [lib]
 name = "hmacsha1"
 path = "src/lib.rs"
 
 [dependencies]
-sha1 = "^0.2.0"
+sha1 = "0.6"
 
 [dev-dependencies]
-rustc-serialize = "0.3"
+hex = "0.4"
