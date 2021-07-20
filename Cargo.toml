@@ -1,6 +1,6 @@
 [package]
 name = "hmac-sha"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2018"
 authors = ["Philip Woolford <woolford.philip@gmail.com>", "Leonardo Razovic <lrazovic@gmail.com>"]
 keywords = ["crypto", "sha", "hmac", "digest"]
