@@ -8,7 +8,6 @@ description = "Minimal implementation of HMAC-SHA-{1,2,3} in Rust."
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/lrazovic/rust-hmac-sha"
 include = ["**/*.rs", "LICENSE"]
-readme = "README.md"
 categories = ["cryptography", "no-std"]
 
 [lib]
