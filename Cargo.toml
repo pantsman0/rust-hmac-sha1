@@ -7,11 +7,10 @@ keywords = ["hmac", "sha"]
 description = "Minimal implementation of HMAC-SHA(1-2-3) in Rust."
 license-file = "LICENSE"
 repository = "https://github.com/lrazovic/rust-hmac-sha1"
-
 include = ["**/*.rs", "LICENSE"]
 
 [lib]
-name = "hmacsha1"
+name = "hmacsha"
 path = "src/lib.rs"
 
 [dependencies]

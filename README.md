@@ -1,22 +1,25 @@
-# Rust-HMAC-SHA1
+# Rust-HMAC-SHA
 
-[![Build Status](https://travis-ci.org/pantsman0/rust-hmac-sha1.png?branch=master)](https://github.com/pantsman0/rust-hmac-sha1)
+![example workflow](https://github.com/lrazovic/rust-hmac-sha1/actions/workflows/ci.yml/badge.svg)
 ![creates.io version](https://img.shields.io/crates/v/hmac-sha1.svg)
 
-A pure Rust implementation of the Hash-based Message Authentication Code Algoritm for SHA1.
+A pure Rust implementation of the Hash-based Message Authentication Code Algoritm for SHA-1.
 
 ## Usage
 
-To import rust-hmac-sha1 add the following to your Cargo.toml:
+To import rust-hmac-sha add the following to your Cargo.toml:
+
 ```toml
 [dependencies]
-hmac-sha1 = "^0.1"
+hmac-sha = "0.2"
 ```
 
-To use rust-hmac-sha1 add the following to your crate root:
+To use rust-hmac-sha1add the following to your crate root:
+
 ```rust
-use hmac-sha1;
+use hmac-sha;
 ```
+
 ## Contributions
 
 Any contributions are welcome. This was implemented as a learning experience and any advice is appreciated.
