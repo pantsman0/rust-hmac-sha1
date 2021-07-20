@@ -1,7 +1,7 @@
 # Rust-HMAC-SHA
 
 ![CI status](https://github.com/lrazovic/rust-hmac-sha1/actions/workflows/ci.yml/badge.svg)
-![creates.io version](https://img.shields.io/crates/v/hmac-sha)
+[![creates.io version](https://img.shields.io/crates/v/hmac-sha)](https://crates.io/crates/hmac-sha)
 
 A pure Rust implementation of the Hash-based Message Authentication Code Algoritm for SHA-{1,2,3}.
 
