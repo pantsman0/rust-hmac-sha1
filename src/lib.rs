@@ -7,10 +7,11 @@ const INNER_PAD_BYTES: u8 = 0x36;
 const OUTER_PAD_BYTE: u8 = 0x5c;
 const KEY_PAD_BYTE: u8 = 0x00;
 
-#[must_use]
-pub fn hmac_sha1(key: &[u8], message: &[u8]) -> [u8; SHA1_DIGEST_BYTES] {
+use sha1::{Digest, Sha1};
+
+pub fn hmac_sha1(key: &[u8], message: &[u8], output: &mut [u8]) {
     // instantiate internal structures
-    let mut sha1_ctx = sha1::Sha1::new();
+    let mut sha1_ctx = Sha1::new();
     let auth_key: &mut [u8; SHA1_KEY_BYTES] = &mut [KEY_PAD_BYTE; SHA1_KEY_BYTES];
 
     // if the key is longer than the hasher's block length, it should be truncated using the hasher
@@ -19,10 +20,8 @@ pub fn hmac_sha1(key: &[u8], message: &[u8]) -> [u8; SHA1_DIGEST_BYTES] {
         sha1_ctx.update(key);
 
         // assign derived authentication key
-        auth_key[..SHA1_DIGEST_BYTES].copy_from_slice(&(sha1_ctx.digest().bytes()));
-
-        // reset hash for reuse
-        sha1_ctx.reset();
+        let digest = sha1_ctx.finalize_reset();
+        auth_key[..SHA1_DIGEST_BYTES].copy_from_slice(&(digest));
     } else {
         auth_key[..key.len()].copy_from_slice(key);
     }
@@ -39,13 +38,12 @@ pub fn hmac_sha1(key: &[u8], message: &[u8]) -> [u8; SHA1_DIGEST_BYTES] {
     // perform inner hash
     sha1_ctx.update(&inner_padding);
     sha1_ctx.update(message);
-    let inner_hash = sha1_ctx.digest().bytes();
-    sha1_ctx.reset();
+    let inner_hash = sha1_ctx.finalize_reset();
 
     // perform outer hash
     sha1_ctx.update(&outer_padding);
     sha1_ctx.update(&inner_hash);
-    sha1_ctx.digest().bytes()
+    output.copy_from_slice(&sha1_ctx.finalize())
 }
 
 #[cfg(test)]
@@ -59,9 +57,9 @@ mod tests {
         let data = "Hi There".as_bytes();
         let key = &[0x0b; 20];
         let expected = "b617318655057264e28bc0b6fb378c8ef146be00".to_string();
-
-        let hash = hmac_sha1(key, data);
-        assert_eq!(hex::encode(hash), expected);
+        let mut buf = [0u8; 20];
+        hmac_sha1(key, data, &mut buf);
+        assert_eq!(hex::encode(buf), expected);
     }
 
     #[test]
@@ -70,9 +68,9 @@ mod tests {
         let data = "what do ya want for nothing?".as_bytes();
         let key = "Jefe".as_bytes();
         let expected = "effcdf6ae5eb2fa2d27416d5f184df9c259a7c79".to_string();
-
-        let hash = hmac_sha1(key, data);
-        assert_eq!(hex::encode(hash), expected);
+        let mut buf = [0u8; 20];
+        hmac_sha1(key, data, &mut buf);
+        assert_eq!(hex::encode(buf), expected);
     }
 
     #[test]
@@ -81,9 +79,9 @@ mod tests {
         let data = &[0xdd; 50];
         let key = &[0xaa; 20];
         let expected = "125d7342b9ac11cd91a39af48aa17b4f63f175d3".to_string();
-
-        let hash = hmac_sha1(key, data);
-        assert_eq!(hex::encode(hash), expected);
+        let mut buf = [0u8; 20];
+        hmac_sha1(key, data, &mut buf);
+        assert_eq!(hex::encode(buf), expected);
     }
 
     #[test]
@@ -95,8 +93,8 @@ mod tests {
             25,
         ];
         let expected = "4c9007f4026250c6bc8414f9bf50c86c2d7235da".to_string();
-
-        let hash = hmac_sha1(key, data);
-        assert_eq!(hex::encode(hash), expected);
+        let mut buf = [0u8; 20];
+        hmac_sha1(key, data, &mut buf);
+        assert_eq!(hex::encode(buf), expected);
     }
 }
