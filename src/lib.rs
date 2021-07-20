@@ -57,7 +57,7 @@ mod tests {
         let data = "Hi There".as_bytes();
         let key = &[0x0b; 20];
         let expected = "b617318655057264e28bc0b6fb378c8ef146be00".to_string();
-        let mut buf = [0u8; 20];
+        let mut buf = [0_u8; 20];
         hmac_sha1(key, data, &mut buf);
         assert_eq!(hex::encode(buf), expected);
     }
@@ -68,7 +68,7 @@ mod tests {
         let data = "what do ya want for nothing?".as_bytes();
         let key = "Jefe".as_bytes();
         let expected = "effcdf6ae5eb2fa2d27416d5f184df9c259a7c79".to_string();
-        let mut buf = [0u8; 20];
+        let mut buf = [0_u8; 20];
         hmac_sha1(key, data, &mut buf);
         assert_eq!(hex::encode(buf), expected);
     }
@@ -79,7 +79,7 @@ mod tests {
         let data = &[0xdd; 50];
         let key = &[0xaa; 20];
         let expected = "125d7342b9ac11cd91a39af48aa17b4f63f175d3".to_string();
-        let mut buf = [0u8; 20];
+        let mut buf = [0_u8; 20];
         hmac_sha1(key, data, &mut buf);
         assert_eq!(hex::encode(buf), expected);
     }
@@ -93,7 +93,7 @@ mod tests {
             25,
         ];
         let expected = "4c9007f4026250c6bc8414f9bf50c86c2d7235da".to_string();
-        let mut buf = [0u8; 20];
+        let mut buf = [0_u8; 20];
         hmac_sha1(key, data, &mut buf);
         assert_eq!(hex::encode(buf), expected);
     }
