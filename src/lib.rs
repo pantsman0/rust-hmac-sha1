@@ -1,4 +1,4 @@
-extern crate sha1;
+use sha1::{Sha1, Digest};
 
 // define hash constants
 pub const SHA1_DIGEST_BYTES: usize = 20;
@@ -11,19 +11,16 @@ pub fn hmac_sha1(key: &[u8], message: &[u8]) -> [u8; SHA1_DIGEST_BYTES] {
     let key_pad_byte:   u8 = 0x00;
 
     // instantiate internal structures
-    let mut sha1_ctx = sha1::Sha1::new();
-    let mut auth_key: &mut [u8; SHA1_KEY_BYTES] = &mut [key_pad_byte; SHA1_KEY_BYTES];
+    let mut sha1_ctx = Sha1::new();
+    let auth_key: &mut [u8; SHA1_KEY_BYTES] = &mut [key_pad_byte; SHA1_KEY_BYTES];
 
     // if the key is longer than the hasher's block length, it should be truncated using the hasher
-    if { key.len() > SHA1_KEY_BYTES } {
+    if key.len() > SHA1_KEY_BYTES {
         // derive new authentication from provided key
         sha1_ctx.update(key);
 
         // assign derived authentication key
-        auth_key[..SHA1_DIGEST_BYTES].copy_from_slice(&(sha1_ctx.digest().bytes()));
-
-        // reset hash for reuse
-        sha1_ctx.reset();
+        auth_key[..SHA1_DIGEST_BYTES].copy_from_slice(&(sha1_ctx.finalize_reset()[..]));
     } else {
         auth_key[..key.len()].copy_from_slice(key);
     }
@@ -40,23 +37,23 @@ pub fn hmac_sha1(key: &[u8], message: &[u8]) -> [u8; SHA1_DIGEST_BYTES] {
     // perform inner hash
     sha1_ctx.update(&inner_padding);
     sha1_ctx.update(message);
-    let inner_hash = sha1_ctx.digest().bytes();
-    sha1_ctx.reset();
+    let inner_hash = sha1_ctx.finalize_reset();
 
     // perform outer hash
+    let mut return_buffer = [0u8;20];
     sha1_ctx.update(&outer_padding);
     sha1_ctx.update(&inner_hash);
-    sha1_ctx.digest().bytes()
+    return_buffer[..SHA1_DIGEST_BYTES].copy_from_slice(&(sha1_ctx.finalize()[..]));
+    return_buffer
 }
 
 
-#[cfg(test)]extern crate rustc_serialize;
+
 #[cfg(test)]
 mod tests {
+    use crate::*;
 
-    use hmac_sha1;
-
-    use rustc_serialize::hex::ToHex;
+    use hex::ToHex;
 
 
     #[test]
@@ -67,7 +64,7 @@ mod tests {
         let expected = "b617318655057264e28bc0b6fb378c8ef146be00".to_string();
 
         let hash = hmac_sha1(key, data);
-        assert_eq!(hash.to_hex(),expected);
+        assert_eq!(hash.encode_hex::<String>(),expected);
     }
 
     #[test]
@@ -78,7 +75,7 @@ mod tests {
         let expected = "effcdf6ae5eb2fa2d27416d5f184df9c259a7c79".to_string();
 
         let hash = hmac_sha1(key, data);
-        assert_eq!(hash.to_hex(),expected);
+        assert_eq!(hash.encode_hex::<String>(),expected);
     }
 
     #[test]
@@ -89,7 +86,7 @@ mod tests {
         let expected = "125d7342b9ac11cd91a39af48aa17b4f63f175d3".to_string();
 
         let hash = hmac_sha1(key, data);
-        assert_eq!(hash.to_hex(),expected);
+        assert_eq!(hash.encode_hex::<String>(),expected);
     }
 
     #[test]
@@ -100,6 +97,39 @@ mod tests {
         let expected = "4c9007f4026250c6bc8414f9bf50c86c2d7235da".to_string();
 
         let hash = hmac_sha1(key, data);
-        assert_eq!(hash.to_hex(),expected);
+        assert_eq!(hash.encode_hex::<String>(),expected);
+    }
+
+    #[test]
+    fn test_vector5() {
+        // tuples of (data, key, expected hex string)
+        let data = "Test With Truncation".as_bytes();
+        let key = &[0x0c;20];
+        let expected = "4c1a03424b55e07fe7f27be1d58bb9324a9a5a04".to_string();
+
+        let hash = hmac_sha1(key, data);
+        assert_eq!(hash.encode_hex::<String>(),expected);
+    }
+
+    #[test]
+    fn test_vector6() {
+        // tuples of (data, key, expected hex string)
+        let data = "Test Using Larger Than Block-Size Key - Hash Key First".as_bytes();
+        let key = &[0xaa;80];
+        let expected = "aa4ae5e15272d00e95705637ce8a3b55ed402112".to_string();
+
+        let hash = hmac_sha1(key, data);
+        assert_eq!(hash.encode_hex::<String>(),expected);
+    }
+
+    #[test]
+    fn test_vector7() {
+        // tuples of (data, key, expected hex string)
+        let data = "Test Using Larger Than Block-Size Key and Larger Than One Block-Size Data".as_bytes();
+        let key = &[0xaa;80];
+        let expected = "e8e99d0f45237d786d6bbaa7965c7808bbff1a91".to_string();
+
+        let hash = hmac_sha1(key, data);
+        assert_eq!(hash.encode_hex::<String>(),expected);
     }
 }
