@@ -5,7 +5,6 @@ version = "0.2.1"
 authors = ["Philip Woolford <woolford.philip@gmail.com>"]
 keywords = ["hmac", "sha1"]
 description = "Minimal implementation of HMAC-SHA1 in Rust."
-license = "BSD 3-CLAUSE"
 license-file = "LICENSE"
 repository = "https://github.com/pantsman0/rust-hmac-sha1"
 readme = "README.md"
