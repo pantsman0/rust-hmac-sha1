@@ -2,6 +2,9 @@
 .idea/*
 hmac-sha1.iml
 
+#VS Code
+.vscode/
+
 #Rust
 Cargo.lock
 

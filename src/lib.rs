@@ -1,50 +1,19 @@
-use sha1::{Sha1, Digest};
+use sha1::Sha1;
+use hmac::{Hmac, Mac};
 
 // define hash constants
 pub const SHA1_DIGEST_BYTES: usize = 20;
-const SHA1_KEY_BYTES: usize = 64;
 
 pub fn hmac_sha1(key: &[u8], message: &[u8]) -> [u8; SHA1_DIGEST_BYTES] {
-    // set constants for HMAC
-    let inner_pad_byte: u8 = 0x36;
-    let outer_pad_byte: u8 = 0x5c;
-    let key_pad_byte:   u8 = 0x00;
+    // Create the hasher with the key. We can use expect for Hmac algorithms as they allow arbitrary key sizes.
+    let mut hasher: Hmac<Sha1> = Mac::new_from_slice(key)
+         .expect("HMAC algoritms can take keys of any size");
 
-    // instantiate internal structures
-    let mut sha1_ctx = Sha1::new();
-    let auth_key: &mut [u8; SHA1_KEY_BYTES] = &mut [key_pad_byte; SHA1_KEY_BYTES];
+    // hash the message
+    hasher.update(message);
 
-    // if the key is longer than the hasher's block length, it should be truncated using the hasher
-    if key.len() > SHA1_KEY_BYTES {
-        // derive new authentication from provided key
-        sha1_ctx.update(key);
-
-        // assign derived authentication key
-        auth_key[..SHA1_DIGEST_BYTES].copy_from_slice(&(sha1_ctx.finalize_reset()[..]));
-    } else {
-        auth_key[..key.len()].copy_from_slice(key);
-    }
-
-    // generate padding arrays
-    let mut inner_padding: [u8; SHA1_KEY_BYTES] = [inner_pad_byte; SHA1_KEY_BYTES];
-    let mut outer_padding: [u8; SHA1_KEY_BYTES] = [outer_pad_byte; SHA1_KEY_BYTES];
-
-    for offset in 0..auth_key.len() {
-        inner_padding[offset] ^= auth_key[offset];
-        outer_padding[offset] ^= auth_key[offset];
-    }
-
-    // perform inner hash
-    sha1_ctx.update(&inner_padding);
-    sha1_ctx.update(message);
-    let inner_hash = sha1_ctx.finalize_reset();
-
-    // perform outer hash
-    let mut return_buffer = [0u8;20];
-    sha1_ctx.update(&outer_padding);
-    sha1_ctx.update(&inner_hash);
-    return_buffer[..SHA1_DIGEST_BYTES].copy_from_slice(&(sha1_ctx.finalize()[..]));
-    return_buffer
+    // finalize the hash and convert to a static array
+    hasher.finalize().into_bytes().into()
 }
 
 
