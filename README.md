@@ -14,7 +14,7 @@ hmac-sha1 = "^0.2"
 
 To use rust-hmac-sha1, simply use the single provided function:
 ```rust
-    let hmac_digest: [u8; hmac_sha1::SHA1_DIGEST_BYTES] hmac_sha1::hmac_sha1(key, message);
+    let hmac_digest: [u8; hmac_sha1::SHA1_DIGEST_BYTES]  = hmac_sha1::hmac_sha1(key, message);
 ```
 ## Contributions
 
