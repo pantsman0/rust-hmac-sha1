@@ -2,7 +2,32 @@
 
 ![crates.io version](https://img.shields.io/crates/v/hmac-sha1.svg)
 
-A pure rust implementation of the Hash-based Message Authentication Code Algoritm for SHA1.
+A simple wrapper around the RustCrypto `hmac` and `sha1` crates for simple `HMAC-SHA1` generation.
+
+## Functionality Note
+
+As the crate is now a thin wrapper around RustCrypto, please note that this crate can be replaced with the following code:
+
+```rust
+use sha1::Sha1;
+use hmac::{Hmac, Mac};
+
+pub fn main() {
+    ...
+
+    // Create the hasher with the key. We can use expect for Hmac algorithms as they allow arbitrary key sizes.
+    let mut hasher: Hmac<Sha1> = Mac::new_from_slice(key) .expect("HMAC algoritms can take keys of any size");
+
+    // hash the message
+    hasher.update(message);
+
+    // finalize the hash and convert to a static array
+    let hmac: [u8;20] = hasher.finalize().into_bytes().into()
+
+    ...
+}
+
+```
 
 ## Usage
 
@@ -14,7 +39,7 @@ hmac-sha1 = "^0.2"
 
 To use rust-hmac-sha1, simply use the single provided function:
 ```rust
-    let hmac_digest: [u8; hmac_sha1::SHA1_DIGEST_BYTES]  = hmac_sha1::hmac_sha1(key, message);
+let hmac_digest: [u8; hmac_sha1::SHA1_DIGEST_BYTES] = hmac_sha1::hmac_sha1(key, message);
 ```
 ## Contributions
 
